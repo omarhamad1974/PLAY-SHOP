@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop | PLAY</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="js/tw-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-sans">
+<div id="app-header"></div>
+
+<main class="max-w-7xl mx-auto px-5 pt-14">
+  <h1 id="title" class="font-serif text-4xl text-center mb-8"></h1>
+  <div class="flex flex-wrap items-center justify-between gap-4 border-y border-line py-4 mb-10">
+    <div id="chips" class="flex flex-wrap gap-2"></div>
+    <label class="text-sm flex items-center gap-2"><span data-i18n="sort"></span>
+      <select id="sort" class="border border-line px-2 py-1 text-sm bg-white">
+        <option value="new" data-i18n="newest"></option>
+        <option value="low" data-i18n="price_low"></option>
+        <option value="high" data-i18n="price_high"></option>
+      </select>
+    </label>
+  </div>
+  <div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10"></div>
+  <p id="empty" class="hidden text-center text-stone py-20" data-i18n="no_items"></p>
+</main>
+
+<div id="app-footer"></div>
+
+<script src="js/config.js"></script>
+<script src="js/demo-data.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+let sortVal = 'new';
+PLAY.page(async () => {
+  const [cats, prods, offers] = await Promise.all([PLAY_DATA.categories(), PLAY_DATA.products(), PLAY_DATA.offers()]);
+  const cat = PLAY.param('cat'), group = PLAY.param('group'), onlyOffers = PLAY.param('offers');
+  let list = prods;
+  let title = PLAY.t('shop');
+  if (onlyOffers) { list = list.filter(p => PLAY.offerFor(p, offers)); title = PLAY.t('offers'); }
+  if (group) {
+    const ids = cats.filter(c => c.group_key === group).map(c => c.id);
+    list = list.filter(p => ids.includes(p.category_id)); title = PLAY.t(group);
+  }
+  if (cat) {
+    const c = cats.find(x => x.slug === cat);
+    if (c) { list = list.filter(p => p.category_id === c.id); title = PLAY.pick(c, 'name'); }
+  }
+  document.getElementById('title').textContent = title;
+  document.title = title + ' | PLAY';
+
+  const chip = (href, label, on) => `<a href="${href}" class="chip ${on ? 'on' : ''}">${PLAY.esc(label)}</a>`;
+  document.getElementById('chips').innerHTML =
+    chip('products.html', PLAY.t('all'), !cat && !group && !onlyOffers) +
+    cats.map(c => chip('products.html?cat=' + c.slug, PLAY.pick(c, 'name'), cat === c.slug)).join('');
+
+  const sel = document.getElementById('sort'); sel.value = sortVal;
+  sel.onchange = () => { sortVal = sel.value; PLAY.refresh(); };
+  const fp = p => PLAY.finalPrice(p, offers);
+  if (sortVal === 'low') list = [...list].sort((a, b) => fp(a) - fp(b));
+  if (sortVal === 'high') list = [...list].sort((a, b) => fp(b) - fp(a));
+
+  document.getElementById('grid').innerHTML = list.map(p => PLAY.card(p, offers)).join('');
+  document.getElementById('empty').classList.toggle('hidden', list.length > 0);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLAY | Egyptian natural &amp; handmade products</title>
+<meta name="description" content="PLAY: natural soaps and oils, handmade carpets and pottery from Egypt. Gifts and corporate packages.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="js/tw-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-sans">
+<div id="app-header"></div>
+
+<section class="relative bg-sand">
+  <div class="max-w-7xl mx-auto px-5 py-24 md:py-36 text-center">
+    <p class="eyebrow mb-6" data-i18n="hero_eyebrow"></p>
+    <h1 class="font-serif text-5xl md:text-7xl leading-tight mb-10" data-i18n="hero_title"></h1>
+    <a href="products.html" class="btn btn-solid" data-i18n="hero_cta"></a>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-5 mt-20">
+  <h2 class="font-serif text-3xl text-center mb-10" data-i18n="shop_by"></h2>
+  <div id="cats" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+</section>
+
+<section id="offerSec" class="max-w-7xl mx-auto px-5 mt-24 hidden">
+  <div class="text-center mb-10">
+    <p class="eyebrow mb-2" data-i18n="offer_day"></p>
+    <p class="text-sm text-clay"><span data-i18n="ends_in"></span> <span id="countdown" class="tabular-nums font-medium"></span></p>
+  </div>
+  <div id="offerGrid" class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10"></div>
+</section>
+
+<section class="max-w-7xl mx-auto px-5 mt-24">
+  <h2 class="font-serif text-3xl text-center mb-10" data-i18n="featured"></h2>
+  <div id="featGrid" class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10"></div>
+</section>
+
+<section class="mt-24 bg-ink text-white">
+  <div class="max-w-3xl mx-auto px-5 py-20 text-center">
+    <h2 class="font-serif text-4xl mb-4" data-i18n="gifts_title"></h2>
+    <p class="text-white/70 mb-8" data-i18n="gifts_text"></p>
+    <a href="packages.html" class="btn border-white text-white hover:bg-white hover:text-ink" data-i18n="gifts_cta"></a>
+  </div>
+</section>
+
+<div id="app-footer"></div>
+
+<script src="js/config.js"></script>
+<script src="js/demo-data.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+let timer;
+PLAY.page(async () => {
+  const [cats, prods, offers] = await Promise.all([PLAY_DATA.categories(), PLAY_DATA.products(), PLAY_DATA.offers()]);
+  document.getElementById('cats').innerHTML = cats.map(c => `
+    <a href="products.html?cat=${c.slug}" class="card block">
+      <div class="ph" style="aspect-ratio:1/1;font-size:1.5rem">${PLAY.esc(PLAY.pick(c, 'name'))}</div>
+    </a>`).join('');
+
+  const offered = prods.filter(p => PLAY.offerFor(p, offers));
+  const sec = document.getElementById('offerSec');
+  sec.classList.toggle('hidden', !offered.length);
+  document.getElementById('offerGrid').innerHTML = offered.map(p => PLAY.card(p, offers)).join('');
+  clearInterval(timer);
+  if (offered.length) {
+    const end = new Date(PLAY.offerFor(offered[0], offers).ends_at);
+    const tick = () => {
+      const s = Math.max(0, Math.floor((end - new Date()) / 1000));
+      const f = n => String(n).padStart(2, '0');
+      document.getElementById('countdown').textContent = `${f(Math.floor(s / 3600))}:${f(Math.floor(s % 3600 / 60))}:${f(s % 60)}`;
+    };
+    tick(); timer = setInterval(tick, 1000);
+  }
+  const feat = prods.filter(p => p.featured).slice(0, 4);
+  document.getElementById('featGrid').innerHTML = (feat.length ? feat : prods.slice(0, 4)).map(p => PLAY.card(p, offers)).join('');
+});
+</script>
+</body>
+</html>

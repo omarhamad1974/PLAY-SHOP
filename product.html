@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product | PLAY</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="js/tw-config.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-sans">
+<div id="app-header"></div>
+<main class="max-w-6xl mx-auto px-5 pt-10">
+  <a href="products.html" class="text-sm text-stone link-u" data-i18n="back"></a>
+  <div id="view" class="grid md:grid-cols-2 gap-12 mt-8"></div>
+  <div id="related-wrap" class="mt-24 hidden">
+    <h2 class="font-serif text-3xl text-center mb-10" data-i18n="featured"></h2>
+    <div id="related" class="grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-10"></div>
+  </div>
+</main>
+<div id="app-footer"></div>
+
+<script src="js/config.js"></script>
+<script src="js/demo-data.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+let qty = 1;
+PLAY.page(async () => {
+  const [cats, prods, offers] = await Promise.all([PLAY_DATA.categories(), PLAY_DATA.products(), PLAY_DATA.offers()]);
+  const p = prods.find(x => x.slug === PLAY.param('slug'));
+  const view = document.getElementById('view');
+  if (!p) { view.innerHTML = `<p class="col-span-2 text-center text-stone py-20">${PLAY.t('no_items')}</p>`; return; }
+  const o = PLAY.offerFor(p, offers), fp = PLAY.finalPrice(p, offers);
+  const cat = cats.find(c => c.id === p.category_id);
+  document.title = PLAY.pick(p, 'name') + ' | PLAY';
+  const img = p.image_url
+    ? `<img src="${PLAY.esc(p.image_url)}" alt="${PLAY.esc(PLAY.pick(p, 'name'))}" class="w-full h-full object-cover">`
+    : `<div class="ph w-full h-full" style="font-size:1.6rem">${PLAY.esc(PLAY.pick(p, 'name'))}</div>`;
+  view.innerHTML = `
+    <div class="card-img relative" style="aspect-ratio:1/1">${img}${o ? `<span class="badge">-${o.discount_percent}%</span>` : ''}</div>
+    <div class="md:pt-8">
+      ${cat ? `<p class="eyebrow mb-3">${PLAY.esc(PLAY.pick(cat, 'name'))}</p>` : ''}
+      <h1 class="font-serif text-4xl mb-4">${PLAY.esc(PLAY.pick(p, 'name'))}</h1>
+      <p class="text-xl mb-6">${o ? `<span class="text-stone line-through me-3">${PLAY.money(p.price_egp)}</span>` : ''}${PLAY.money(fp)}</p>
+      <p class="text-stone leading-relaxed mb-8">${PLAY.esc(PLAY.pick(p, 'desc'))}</p>
+      <div class="flex items-center gap-4 mb-6">
+        <span class="text-sm">${PLAY.t('qty')}</span>
+        <div class="flex items-center border border-line">
+          <button id="minus" class="px-4 py-2">-</button><span id="q" class="w-8 text-center">${qty}</span><button id="plus" class="px-4 py-2">+</button>
+        </div>
+      </div>
+      <button id="add" class="btn btn-solid w-full">${PLAY.t('add')}</button>
+    </div>`;
+  document.getElementById('minus').onclick = () => { qty = Math.max(1, qty - 1); document.getElementById('q').textContent = qty; };
+  document.getElementById('plus').onclick = () => { qty++; document.getElementById('q').textContent = qty; };
+  document.getElementById('add').onclick = () => {
+    PLAY.cartAdd({ id: p.id, slug: p.slug, name_en: p.name_en, name_ar: p.name_ar, price: fp, image_url: p.image_url }, qty);
+    qty = 1; document.getElementById('q').textContent = qty;
+  };
+  const rel = prods.filter(x => x.id !== p.id && x.category_id === p.category_id).slice(0, 4);
+  document.getElementById('related-wrap').classList.toggle('hidden', !rel.length);
+  document.getElementById('related').innerHTML = rel.map(x => PLAY.card(x, offers)).join('');
+});
+</script>
+</body>
+</html>
