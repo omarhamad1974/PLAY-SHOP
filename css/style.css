@@ -1,1 +1,25 @@
-
+/* PLAY custom styles on top of Tailwind */
+html { scroll-behavior: smooth; }
+body { background: #fff; color: #1c1b19; -webkit-font-smoothing: antialiased; }
+[dir="rtl"] body { font-family: 'Tajawal', 'Inter', sans-serif; }
+[dir="rtl"] .font-serif { font-family: 'Tajawal', serif; font-weight: 500; }
+.eyebrow { font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: #8a847a; }
+[dir="rtl"] .eyebrow { letter-spacing: 0; font-size: .8rem; }
+.ph { display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem;
+  background: linear-gradient(135deg, #efe9de, #e2d9c8); color: #8a847a; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; }
+.card-img { aspect-ratio: 4 / 5; overflow: hidden; background: #f6f3ee; }
+.card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.card:hover .card-img img { transform: scale(1.04); }
+.btn { display: inline-block; border: 1px solid #1c1b19; padding: .8rem 1.8rem; font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; transition: all .25s; cursor: pointer; background: transparent; }
+[dir="rtl"] .btn { letter-spacing: 0; font-size: .9rem; }
+.btn:hover { background: #1c1b19; color: #fff; }
+.btn-solid { background: #1c1b19; color: #fff; }
+.btn-solid:hover { background: #a8643f; border-color: #a8643f; }
+.link-u { border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+.field { width: 100%; border: 1px solid #e4dfd6; padding: .8rem 1rem; font-size: .95rem; background: #fff; outline: none; }
+.field:focus { border-color: #1c1b19; }
+.chip { padding: .45rem 1rem; border: 1px solid #e4dfd6; font-size: .8rem; cursor: pointer; transition: all .2s; }
+.chip.on, .chip:hover { background: #1c1b19; color: #fff; border-color: #1c1b19; }
+.badge { position: absolute; top: .75rem; inset-inline-start: .75rem; background: #a8643f; color: #fff; font-size: .7rem; padding: .2rem .6rem; letter-spacing: .08em; }
+.toast { position: fixed; bottom: 1.5rem; inset-inline: 0; margin: auto; width: max-content; max-width: 90vw; background: #1c1b19; color: #fff; padding: .8rem 1.4rem; font-size: .85rem; z-index: 100; animation: fade .3s; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } }
