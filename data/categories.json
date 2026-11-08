@@ -1,0 +1,30 @@
+[
+  {
+    "id": "c1",
+    "slug": "natural-soaps",
+    "group_key": "natural",
+    "name_en": "Natural Soaps",
+    "name_ar": "صابون طبيعي"
+  },
+  {
+    "id": "c2",
+    "slug": "natural-oils",
+    "group_key": "natural",
+    "name_en": "Natural Oils",
+    "name_ar": "زيوت طبيعية"
+  },
+  {
+    "id": "c3",
+    "slug": "carpets",
+    "group_key": "handmade",
+    "name_en": "Handmade Carpets",
+    "name_ar": "سجاد يدوي"
+  },
+  {
+    "id": "c4",
+    "slug": "pottery",
+    "group_key": "handmade",
+    "name_en": "Pottery",
+    "name_ar": "فخار"
+  }
+]

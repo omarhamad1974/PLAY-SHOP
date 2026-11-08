@@ -1,0 +1,18 @@
+[
+  {
+    "id": "o1",
+    "product_id": "p3",
+    "discount_percent": 20,
+    "ends_at": "2026-12-31T23:59:00+02:00",
+    "is_active": true,
+    "starts_at": "2026-11-01T00:00:00+02:00"
+  },
+  {
+    "id": "o2",
+    "product_id": "p1",
+    "discount_percent": 15,
+    "ends_at": "2026-12-31T23:59:00+02:00",
+    "is_active": true,
+    "starts_at": "2026-11-01T00:00:00+02:00"
+  }
+]

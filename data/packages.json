@@ -1,0 +1,41 @@
+[
+  {
+    "id": "k1",
+    "slug": "welcome-box",
+    "kind": "gift",
+    "name_en": "Welcome Gift Box",
+    "name_ar": "صندوق الهدية الترحيبي",
+    "desc_en": "Two soaps, one oil and a small clay dish in a handmade box.",
+    "desc_ar": "صابونتان وزيت وطبق فخار صغير في صندوق يدوي.",
+    "min_qty": 1,
+    "price_from_egp": 950,
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "id": "k2",
+    "slug": "executive-set",
+    "kind": "corporate",
+    "name_en": "Executive Giveaway Set",
+    "name_ar": "طقم هدايا الشركات",
+    "desc_en": "Curated set for clients and partners, with your logo on the packaging.",
+    "desc_ar": "طقم مختار للعملاء والشركاء مع شعارك على التغليف.",
+    "min_qty": 25,
+    "price_from_egp": 780,
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "id": "k3",
+    "slug": "event-favors",
+    "kind": "corporate",
+    "name_en": "Event Favors",
+    "name_ar": "تذكارات المناسبات",
+    "desc_en": "Small handmade favors for conferences, weddings and launches.",
+    "desc_ar": "تذكارات يدوية صغيرة للمؤتمرات والأفراح والإطلاقات.",
+    "min_qty": 100,
+    "price_from_egp": 120,
+    "image_url": null,
+    "is_active": true
+  }
+]
